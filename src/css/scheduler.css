@@ -1,0 +1,57 @@
+.scheduler {
+  table-layout: fixed;
+  border-collapse:collapse;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.scheduler,
+.scheduler tr,
+.scheduler th,
+.scheduler td {
+  border:1px solid black;
+}
+.scheduler th,
+.scheduler td {
+  position: relative;
+  font-size: 14px;
+  text-align: center;
+  width: 15px;
+  height: 30px;
+}
+.scheduler-time-title,
+.scheduler-week-title {
+  padding: 0 5px;
+}
+
+.scheduler-time-title {
+  text-align: right;
+}
+.scheduler-week-title {
+  text-align: left;
+}
+.scheduler .slash {
+  width: 80px;
+  height: 80px;
+}
+.scheduler .slash:before {
+  content: "";
+  display: block;
+  position: absolute;
+  top:0;
+  left:0;
+  width: 1px;
+  height: 116px;
+  transform: rotate(-45deg);
+  transform-origin: top;
+  background-color: black;
+}
+.scheduler-active {
+  background: #dff0d8;
+}
+.scheduler-day-toggle,
+.scheduler-half-toggle,
+.scheduler-hour-toggle {
+  cursor: pointer;
+}

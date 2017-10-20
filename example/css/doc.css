@@ -1,0 +1,23 @@
+.log {
+  max-height: 300px;
+  margin: 20px 0;
+  border: 1px solid #000;
+  overflow: auto;
+}
+.log p {
+  font-size: 12px;
+  margin: 0 0 5px 0;
+}
+code {
+  font-size: 14px;
+}
+h2 {
+  margin-top: 40px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid gray;
+}
+code pre {
+  border: 1px solid gray;
+  background-color: #ececec;
+  padding: 30px;
+}

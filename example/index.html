@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>广告排期</title>
+    <link href="css/doc.css" rel="stylesheet"/>
+    <link href="../src/css/scheduler.css" rel="stylesheet"/>
+  </head>
+  <body>
+    <h1>$.fn.scheduler - jQuery 时间选择插件</h1>
+    <p>拖拽选择日间，单击标题可全选</p>
+    <table id="test1"></table>
+    <div id="log" class="log"></div>
+    <script src="js/jquery.min.js"></script>
+    <script src="../src/js/scheduler.js"></script>
+    <script>
+    function log(msg) {
+      $('#log').prepend('<p>' + ++log.line + ': ' + msg + '</p>');
+    }
+    log.line = 0;
+    $('#test1').scheduler({
+      data: {1: [1, 2, 3, 40]},
+      onRender: function () {
+        log('已初始化');
+      },
+      onDragStart: function (d) {
+        log('Drag Start');
+      },
+      onDragMove: function (d) {
+        log('Drag Move');
+      },
+      onDragEnd: function (d) {
+        log('Drag End');
+      },
+      onSelect: function (d) {
+        log('已选择');
+      }
+    });
+    </script>
+    <code>
+      <pre>
+    $('#test1').scheduler({
+      data: {1:[1,2,3,40]},
+      onRender: function () {
+        log('已初始化');
+      },
+      onDragStart: function (d) {
+        log('Drag Start');
+      },
+      onDragMove: function (d) {
+        log('Drag Move');
+      },
+      onDragEnd: function (d) {
+        log('Drag End');
+      },
+      onSelect: function (d) {
+        log('已选择');
+      }
+    });
+
+      </pre>
+    </code>
+    <h2>配置项</h2>
+    <section>
+      <h3>locale {String}</h3>
+      <p>语言环境，可选值 'en'、'cn'，<a href="#faq-i18n">可扩展</a></p>
+      <table id="test2"></table>
+      <script>
+      $('#test2').scheduler({
+        accuracy: 1,
+        locale: 'en'
+      });
+      </script>
+      <code>
+        <pre>$('#test2').scheduler({locale: 'en'});</pre>
+      </code>
+    </section>
+    <section>
+      <h3>accuracy {Integer}</h3>
+      <p>显示精度，意思为一小时细分为多少个单元格，默认一小时一个单元格</p>
+      <table id="test3"></table>
+      <script>
+      $('#test3').scheduler({accuracy: 2});
+      </script>
+      <code>
+        <pre>$('#test3').scheduler({accuracy: 2}); // An hour contains 2 cells</pre>
+      </code>
+    </section>
+    <section>
+      <h3>data {Object}</h3>
+      <p>初始化时默认选中的单元格</p>
+      <table id="test4"></table>
+      <script>
+      $('#test4').scheduler({
+        data: {
+          2: [0, 1, 2, 3, 4, 5],
+          3: [10, 11, 12, 13],
+          4: [10, 11, 12, 13]
+        }
+      });
+      </script>
+      <code>
+        <pre>$('#test4').scheduler({
+  data: {
+    2: [0,1,2,3,4,5],
+    3: [10,11,12,13],
+    4: [10,11,12,13]
+  }
+});</pre>
+      </code>
+    </section>
+    <section>
+      <h3>onRender() {Function}</h3>
+      <p>
+        实例化完成后调用，仅执行一次。 上下文为 table。
+      </p>
+      <h3>onDragStart(selected) {Function}</h3>
+      <p>
+        拖动开始，上下文为 table。
+      </p>
+      <h3>onDragMove(selected) {Function}</h3>
+      <p>
+        拖动中，上下文为 table。
+      </p>
+      <h3>onDragEnd(selected) {Function}</h3>
+      <p>
+        拖动结束，上下文为 table。
+      </p>
+      <h3>onSelected(selected) {Function}</h3>
+      <p>
+        每次有选择有变更时都会执行，上下文为 table。
+      </p>
+    </section>
+    <h2>API</h2>
+    <section>
+      <h3>val(optional)</h3>
+      <p>
+        <ul>
+          <li>设置选中项，当传入 data 对象时，更新当前视图。</li>
+          <li>获取选中项，当不传入任何值时，返回当前选中的 data。</li>
+        </ul>
+      </p>
+      <code><pre>
+$('#test1').scheduler('val', {1: [1,2,3]}); // Setter
+
+$('#test1').scheduler('val'); // Getter</pre></code>
+    </section>
+    <h2>FAQ</h2>
+    <section id="faq-i18n">
+      <h3>如何添加语言</h3>
+      <p></p>
+      <table id="test-faq-1"></table>
+      <script>
+      $.fn.scheduler.locales['zh-tw'] = {
+        AM: '上午',
+        PM: '下午',
+        TIME_TITLE: '時間',
+        WEEK_TITLE: '禮拜',
+        WEEK_DAYS: ['禮拜壹', '禮拜二', '禮拜三', '禮拜四', '禮拜五', '禮拜六', '禮拜日']
+      };
+      $('#test-faq-1').scheduler({locale: 'zh-tw'});
+      </script>
+      <code>
+        <pre>
+$.fn.scheduler.locales['zh-tw'] = {
+  AM: '上午',
+  PM: '下午',
+  TIME_TITLE: '時間',
+  WEEK_TITLE: '禮拜',
+  WEEK_DAYS: ['禮拜壹', '禮拜二', '禮拜三', '禮拜四', '禮拜五', '禮拜六', '禮拜日']
+};
+$('#test-faq-1').scheduler({locale: 'zh-tw'});
+        </pre>
+      </code>
+    </section>
+    <section>
+      <h2>格式转换</h2>
+      <p>插件提供了两个工具方法来提供格式转换：</p>
+      <ul>
+        <li>$.fn.scheduler.util.parse(str[, accuracy])</li>
+        <li>$.fn.scheduler.util.serialize(data[, accuracy])</li>
+      </ul>
+      <code>
+        <pre>
+var data = {1: [1,2,3]};
+var str = $.fn.scheduler.util.serialize(data);
+// => '011100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
+
+$.fn.scheduler.util.parse(str);
+// => {1: [1,2,3]}
+        </pre>
+      </code>
+    </section>
+    <section>
+      <h3>禁选项</h3>
+      <p>未实现</p>
+    </section>
+  </body>
+</html>
