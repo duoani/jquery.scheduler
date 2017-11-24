@@ -382,11 +382,9 @@
     if (!this.moving) {
       return false;
     }
-
     var $cell = $(e.target);
     var row = $cell.data('row');
     var col = $cell.data('col');
-
     if (!this.selectMode || !this.startCoord || (this.endCoord &&
                                                  this.endCoord[0] === row &&
                                                  this.endCoord[1] === col)
@@ -399,11 +397,12 @@
   };
 
   proto.onMouseUp = function (e) {
-    this.selectMode = SelectMode.NONE;
-
-    if (this.moving) {
-    } else if (this.startCoord[0] === this.endCoord[0] &&
-               this.startCoord[1] === this.endCoord[1]) {
+    if (!this.moving) {
+      return false;
+    }
+    // 起始点都在同一个位置
+    if (this.startCoord[0] === this.endCoord[0] &&
+        this.startCoord[1] === this.endCoord[1]) {
       this.updateRange(this.startCoord, this.endCoord, this.selectMode);
     }
     this.options.onDragEnd.call(this.$el, this.cache);
@@ -448,6 +447,7 @@
     this.moving = false;
     this.startCoord = null;
     this.endCoord = null;
+    this.selectMode = SelectMode.NONE;
     this.options.onSelect.call(this.$el, this.val());
   };
 
