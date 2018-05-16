@@ -563,7 +563,6 @@
 
   proto.destroy = function () {
     this.$el.removeClass('scheduler').empty()
-    this.$el.data('scheduler', null)
   };
 
   $.extend(Scheduler.DEFAULTS, Scheduler.LOCALES.zh);
