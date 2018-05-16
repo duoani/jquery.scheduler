@@ -562,8 +562,8 @@
   };
 
   proto.destroy = function () {
-    this.$head.off();
-    this.$body.off();
+    this.$el.removeClass('scheduler').empty()
+    this.$el.data('scheduler', null)
   };
 
   $.extend(Scheduler.DEFAULTS, Scheduler.LOCALES.zh);

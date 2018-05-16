@@ -1,4 +1,5 @@
 .scheduler {
+  width: 100%;
   table-layout: fixed;
   border-collapse:collapse;
   -webkit-user-select: none;
@@ -12,11 +13,14 @@
 .scheduler td {
   border:1px solid black;
 }
-.scheduler th,
-.scheduler td {
+.scheduler td,
+.scheduler th {
   position: relative;
   font-size: 14px;
   text-align: center;
+}
+.scheduler .scheduler-hour-toggle,
+.scheduler .scheduler-hour {
   width: 15px;
   height: 30px;
 }
@@ -34,18 +38,6 @@
 .scheduler .slash {
   width: 80px;
   height: 80px;
-}
-.scheduler .slash:before {
-  content: "";
-  display: block;
-  position: absolute;
-  top:0;
-  left:0;
-  width: 1px;
-  height: 116px;
-  transform: rotate(-45deg);
-  transform-origin: top;
-  background-color: black;
 }
 .scheduler-active {
   background: #dff0d8;
