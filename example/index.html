@@ -124,24 +124,70 @@
 });</pre>
       </code>
     </section>
+
     <section>
       <h3>footer {Boolean}</h3>
       <p>是否显示表尾</p>
       <p>默认值：true</p>
     </section>
     <section>
+      <h3>disabled {Boolean}</h3>
+      <p>是否为禁用状态，禁用时，不能使用交互的方式来更改当前值</p>
+      <p>默认值：false</p>
+      <table id="test5"></table>
+      <button id="enableSel">Enable</button>
+      <button id="disableSel">Disable</button>
+      <script>
+        $('#test5').scheduler({
+          disabled: true,
+          data: {
+            2: [0, 1, 2, 3, 4, 5],
+            3: [10, 11, 12, 13],
+            4: [10, 11, 12, 13]
+          }
+        });
+
+        $('#enableSel').on('click', function () {
+          $('#test5').scheduler('enable');
+        });
+
+        $('#disableSel').on('click', function () {
+          $('#test5').scheduler('disable');
+        });
+      </script>
+      <code>
+        <pre>$('#test5').scheduler({
+  disabled: true,
+  data: {
+    2: [0,1,2,3,4,5],
+    3: [10,11,12,13],
+    4: [10,11,12,13]
+  }
+});
+
+$('#enableSel').on('click', function () {
+  $('#test5').scheduler('enable');
+});
+
+$('#disableSel').on('click', function () {
+  $('#test5').scheduler('disable');
+});</pre>
+      </code>
+    </section>
+
+    <section>
       <h3>multiple {Boolean}</h3>
       <p>单选/多选</p>
       <p>默认值：true</p>
       <p>以下为单选的选区，每一次选择都将原来的选区清除。</p>
-      <table id="test5"></table>
+      <table id="test6"></table>
       <script>
-        $('#test5').scheduler({
+        $('#test6').scheduler({
           multiple: false
         });
       </script>
       <code>
-        <pre>$('#test5').scheduler({ multiple: false });</pre>
+        <pre>$('#test6').scheduler({ multiple: false });</pre>
       </code>
     </section>
     <section>
@@ -192,7 +238,9 @@ $('#test1').scheduler('val'); // Getter</pre></code>
           PM: '下午',
           TIME_TITLE: '時間',
           WEEK_TITLE: '禮拜',
-          WEEK_DAYS: ['禮拜壹', '禮拜二', '禮拜三', '禮拜四', '禮拜五', '禮拜六', '禮拜日']
+          WEEK_DAYS: ['禮拜壹', '禮拜二', '禮拜三', '禮拜四', '禮拜五', '禮拜六', '禮拜日'],
+          DRAG_TIP: '可拖动鼠标选择时间段',
+          RESET: '清空选择'
         };
         $('#test-faq-1').scheduler({
           locale: 'zh-tw'

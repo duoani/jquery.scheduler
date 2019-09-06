@@ -172,6 +172,7 @@
     data: [], // selected cells
     footer: true,
     multiple: true,
+    disabled: false,
     // event callbacks
     onDragStart: $.noop,
     onDragMove: $.noop,
@@ -257,6 +258,9 @@
 
   proto.initTable = function () {
     this.$el.addClass('scheduler');
+    if (this.options.disabled) {
+      this.$el.addClass('scheduler-disabled');
+    }
     this.initHead();
     this.initBody();
     if (this.options.footer) {
@@ -370,8 +374,8 @@
 
   // toggle select one day
   proto.onToggleDay = function (e) {
-    if (!this.options.multiple) {
-      this.val({});
+    if (this.options.disabled) {
+      return;
     }
     var index = $(e.target).parent().data('index');
     var startCoord = [index, 0]; // [row, col] row start form 1
@@ -382,6 +386,9 @@
 
   // toggle select half day
   proto.onToggleHalfDay = function (e) {
+    if (this.options.disabled) {
+      return;
+    }
     var index = $(e.target).data('halfToggle'); // index = 1 | 2
     var fromIndex = (index - 1) * 12 * this.options.accuracy;
     var toIndex = fromIndex + 12 * this.options.accuracy - 1;
@@ -393,6 +400,9 @@
 
   // toggle select an hour
   proto.onToggleHour = function (e) {
+    if (this.options.disabled) {
+      return;
+    }
     var index = $(e.target).data('hourToggle'); // index = 1 | 2
     var fromIndex = index * this.options.accuracy;
     var toIndex = fromIndex + this.options.accuracy - 1;
@@ -403,6 +413,9 @@
   };
 
   proto.onMouseDown = function (e) {
+    if (this.options.disabled) {
+      return;
+    }
     this.moving = true;
     var $cell = $(e.target);
     this.startCoord = [$cell.data('row'), $cell.data('col')];
@@ -486,6 +499,9 @@
   };
 
   proto.onReset = function () {
+    if (this.options.disabled) {
+      return;
+    }
     this.val({});
     this.options.onSelect.call(this.$el, this.val());
   };
@@ -599,6 +615,16 @@
     return [num1, num2];
   };
 
+  proto.disable = function () {
+    this.$el.toggleClass('scheduler-disabled', true);
+    this.options.disabled = true;
+  };
+
+  proto.enable = function () {
+    this.$el.toggleClass('scheduler-disabled', false);
+    this.options.disabled = false;
+  };
+
   /**
    * 如果无传参，则作为 Getter, 否则为 Setter
    * @param {Array} data optional 选中的内容
@@ -627,7 +653,9 @@
 
   var apiMethods = [
     'val',
-    'destroy'
+    'destroy',
+    'disable',
+    'enable'
   ];
 
   // Set as a jQuery plugin
