@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>广告排期</title>
-    <link href="css/doc.css" rel="stylesheet"/>
-    <link href="../src/css/scheduler.css" rel="stylesheet"/>
-  </head>
-  <body>
+
+<head>
+  <meta charset="UTF-8">
+  <title>广告排期</title>
+  <link href="css/doc.css" rel="stylesheet" />
+  <link href="../src/css/scheduler.css" rel="stylesheet" />
+  <style>
+    .main {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main">
     <h1>$.fn.scheduler - jQuery 时间选择插件</h1>
     <p>拖拽选择日间，单击标题可全选</p>
     <table id="test1"></table>
@@ -14,28 +23,30 @@
     <script src="js/jquery.min.js"></script>
     <script src="../src/js/scheduler.js"></script>
     <script>
-    function log(msg) {
-      $('#log').prepend('<p>' + ++log.line + ': ' + msg + '</p>');
-    }
-    log.line = 0;
-    $('#test1').scheduler({
-      data: {1: [1, 2, 3, 4]},
-      onRender: function () {
-        log('已初始化');
-      },
-      onDragStart: function (d) {
-        log('Drag Start');
-      },
-      onDragMove: function (d) {
-        log('Drag Move');
-      },
-      onDragEnd: function (d) {
-        log('Drag End');
-      },
-      onSelect: function (d) {
-        log('已选择');
+      function log(msg) {
+        $('#log').prepend('<p>' + ++log.line + ': ' + msg + '</p>');
       }
-    });
+      log.line = 0;
+      $('#test1').scheduler({
+        data: {
+          1: [1, 2, 3, 4]
+        },
+        onRender: function () {
+          log('已初始化');
+        },
+        onDragStart: function (d) {
+          log('Drag Start');
+        },
+        onDragMove: function (d) {
+          log('Drag Move');
+        },
+        onDragEnd: function (d) {
+          log('Drag End');
+        },
+        onSelect: function (d) {
+          log('已选择');
+        }
+      });
     </script>
     <code>
       <pre>
@@ -57,19 +68,19 @@
         log('已选择');
       }
     });
-
-      </pre>
+    </pre>
     </code>
     <h2>配置项</h2>
     <section>
       <h3>locale {String}</h3>
       <p>语言环境，可选值 'en'、'cn'，<a href="#faq-i18n">可扩展</a></p>
+      <p>默认值：'en'</p>
       <table id="test2"></table>
       <script>
-      $('#test2').scheduler({
-        accuracy: 1,
-        locale: 'en'
-      });
+        $('#test2').scheduler({
+          accuracy: 1,
+          locale: 'en'
+        });
       </script>
       <code>
         <pre>$('#test2').scheduler({locale: 'en'});</pre>
@@ -78,9 +89,12 @@
     <section>
       <h3>accuracy {Integer}</h3>
       <p>显示精度，意思为一小时细分为多少个单元格，默认一小时一个单元格</p>
+      <p>默认值：1</p>
       <table id="test3"></table>
       <script>
-      $('#test3').scheduler({accuracy: 2});
+        $('#test3').scheduler({
+          accuracy: 2
+        });
       </script>
       <code>
         <pre>$('#test3').scheduler({accuracy: 2}); // An hour contains 2 cells</pre>
@@ -89,15 +103,16 @@
     <section>
       <h3>data {Object}</h3>
       <p>初始化时默认选中的单元格</p>
+      <p>默认值：[]</p>
       <table id="test4"></table>
       <script>
-      $('#test4').scheduler({
-        data: {
-          2: [0, 1, 2, 3, 4, 5],
-          3: [10, 11, 12, 13],
-          4: [10, 11, 12, 13]
-        }
-      });
+        $('#test4').scheduler({
+          data: {
+            2: [0, 1, 2, 3, 4, 5],
+            3: [10, 11, 12, 13],
+            4: [10, 11, 12, 13]
+          }
+        });
       </script>
       <code>
         <pre>$('#test4').scheduler({
@@ -107,6 +122,26 @@
     4: [10,11,12,13]
   }
 });</pre>
+      </code>
+    </section>
+    <section>
+      <h3>footer {Boolean}</h3>
+      <p>是否显示表尾</p>
+      <p>默认值：true</p>
+    </section>
+    <section>
+      <h3>multiple {Boolean}</h3>
+      <p>单选/多选</p>
+      <p>默认值：true</p>
+      <p>以下为单选的选区，每一次选择都将原来的选区清除。</p>
+      <table id="test5"></table>
+      <script>
+        $('#test5').scheduler({
+          multiple: false
+        });
+      </script>
+      <code>
+        <pre>$('#test5').scheduler({ multiple: false });</pre>
       </code>
     </section>
     <section>
@@ -140,7 +175,8 @@
           <li>获取选中项，当不传入任何值时，返回当前选中的 data。</li>
         </ul>
       </p>
-      <code><pre>
+      <code>
+        <pre>
 $('#test1').scheduler('val', {1: [1,2,3]}); // Setter
 
 $('#test1').scheduler('val'); // Getter</pre></code>
@@ -151,14 +187,16 @@ $('#test1').scheduler('val'); // Getter</pre></code>
       <p></p>
       <table id="test-faq-1"></table>
       <script>
-      $.fn.scheduler.locales['zh-tw'] = {
-        AM: '上午',
-        PM: '下午',
-        TIME_TITLE: '時間',
-        WEEK_TITLE: '禮拜',
-        WEEK_DAYS: ['禮拜壹', '禮拜二', '禮拜三', '禮拜四', '禮拜五', '禮拜六', '禮拜日']
-      };
-      $('#test-faq-1').scheduler({locale: 'zh-tw'});
+        $.fn.scheduler.locales['zh-tw'] = {
+          AM: '上午',
+          PM: '下午',
+          TIME_TITLE: '時間',
+          WEEK_TITLE: '禮拜',
+          WEEK_DAYS: ['禮拜壹', '禮拜二', '禮拜三', '禮拜四', '禮拜五', '禮拜六', '禮拜日']
+        };
+        $('#test-faq-1').scheduler({
+          locale: 'zh-tw'
+        });
       </script>
       <code>
         <pre>
@@ -195,5 +233,8 @@ $.fn.scheduler.util.parse(str);
       <h3>禁选项</h3>
       <p>未实现</p>
     </section>
-  </body>
+  </div>
+
+</body>
+
 </html>

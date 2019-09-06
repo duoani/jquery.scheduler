@@ -142,8 +142,9 @@
 
   // 选择模式
   var SelectMode = {
-    JOIN: 1,  // 合并模式，添加到选区
+    JOIN: 1, // 合并模式，添加到选区
     MINUS: 2, // 减去模式，从之前的选区中减去
+    REPLACE: 3, // 替换模式，弃用之前的选区，直接使用给定的选区作为最终值
     NONE: 0
   };
 
@@ -167,9 +168,10 @@
   // 默认项
   Scheduler.DEFAULTS = {
     locale: 'en', // i18n
-    accuracy: 1,  // how many cells of an hour
-    data: [],     // selected cells
+    accuracy: 1, // how many cells of an hour
+    data: [], // selected cells
     footer: true,
+    multiple: true,
     // event callbacks
     onDragStart: $.noop,
     onDragMove: $.noop,
@@ -300,7 +302,7 @@
       me.$foot = $('<tfoot></tfoot>').appendTo(me.$el);
     }
     me.$foot.append(me.getFootHtml());
-    me.$foot.on('click', '.scheduler-reset', me.onReset.bind(me))
+    me.$foot.on('click', '.scheduler-reset', me.onReset.bind(me));
   };
 
   proto.getHeadHtml = function (data) {
@@ -320,7 +322,7 @@
       hours += sprintf($.fn.scheduler.templates.HOUR_HEAD_CELL,
                        i, // hour indexs
                        options.accuracy, // row span
-                       i  // hour text
+                       i // hour text
                       );
     }
     return sprintf('<tr>%s</tr>', hours);
@@ -334,8 +336,8 @@
       options.accuracy * 24 + 1,
       options.DRAG_TIP,
       options.RESET
-    )
-  }
+    );
+  };
 
   proto.getBodyHtml = function (data) {
     var me = this;
@@ -368,6 +370,9 @@
 
   // toggle select one day
   proto.onToggleDay = function (e) {
+    if (!this.options.multiple) {
+      this.val({});
+    }
     var index = $(e.target).parent().data('index');
     var startCoord = [index, 0]; // [row, col] row start form 1
     var endCoord = [index, 24 * this.options.accuracy - 1];
@@ -481,9 +486,9 @@
   };
 
   proto.onReset = function () {
-    this.val({})
+    this.val({});
     this.options.onSelect.call(this.$el, this.val());
-  }
+  };
 
   /**
    * 根据选择模式合并合个集合
@@ -493,6 +498,15 @@
    */
   proto.merge = function (origin, current, selectMode) {
     var res = {};
+    // 替换模式下，弃用之前的选区，直接使用当前选区
+    if (selectMode === SelectMode.REPLACE) {
+      for (var i = 1; i <= 7; i++) {
+        if (current[i] && current[i].length) {
+          res[i] = current[i].slice(0);
+        }
+      }
+      return res;
+    }
     for (var i = 1; i <= 7; i++) {
       if (!current[i]) {
         if (origin[i] && origin[i].length) {
@@ -527,6 +541,9 @@
    * @return {SelectMode}
    */
   proto.getRangeSelectMode = function (startCoord, endCoord) {
+    if (!this.options.multiple) {
+      return SelectMode.REPLACE;
+    }
     var rowRange = this.sortCoord(startCoord[0], endCoord[0]);
     var colRange = this.sortCoord(startCoord[1], endCoord[1]);
     var startRow = rowRange[0];
@@ -559,13 +576,17 @@
   /**
    * 根据当前选中的时间格式的空闲情况，决定是全选还是全不选
    * 状态切换：
-   * 空闲 > 全选不
-   * 无空闲 > 全不选
+   * 当前为单选模式(multiple=false)，-> 替换模式
+   * 当前选中时间段为空闲 -> 全选不
+   * 当前选中时间段为无空闲 - > 全不选
    *
    * @param {Array} startCoord 起始坐标 [row, col]
    * @return {SelectMode}
    */
   proto.getCellSelectMode = function (coord) {
+    if (!this.options.multiple) {
+      return SelectMode.REPLACE;
+    }
     // TODO 未过滤 disabled 的格子
     var day = this.data[coord[0]];
     return day && ~day.indexOf(coord[1]) ? SelectMode.MINUS : SelectMode.JOIN;
@@ -596,7 +617,7 @@
   };
 
   proto.destroy = function () {
-    this.$el.removeClass('scheduler').empty()
+    this.$el.removeClass('scheduler').empty();
   };
 
   $.extend(Scheduler.DEFAULTS, Scheduler.LOCALES.zh);
