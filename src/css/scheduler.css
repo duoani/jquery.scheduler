@@ -12,17 +12,18 @@
 .scheduler th,
 .scheduler td {
   border:1px solid black;
+  height: 25px;
+  line-height: 25px;
 }
 .scheduler td,
 .scheduler th {
   position: relative;
-  font-size: 14px;
+  font-size: 12px;
   text-align: center;
 }
 .scheduler .scheduler-hour-toggle,
 .scheduler .scheduler-hour {
   width: 15px;
-  height: 30px;
 }
 .scheduler-time-title,
 .scheduler-week-title {
@@ -37,7 +38,7 @@
 }
 .scheduler .slash {
   width: 80px;
-  height: 80px;
+  height: 55px;
 }
 .scheduler-active {
   background: #dff0d8;
@@ -46,4 +47,14 @@
 .scheduler-half-toggle,
 .scheduler-hour-toggle {
   cursor: pointer;
+}
+.scheduler > tfoot > tr > td {
+  text-align: left;
+  padding: 0 5px;
+}
+.scheduler-reset {
+  float: right;
+}
+.scheduler-active {
+  background-color: #87bd41
 }

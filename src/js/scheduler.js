@@ -169,7 +169,7 @@
     locale: 'en', // i18n
     accuracy: 1,  // how many cells of an hour
     data: [],     // selected cells
-
+    footer: true,
     // event callbacks
     onDragStart: $.noop,
     onDragMove: $.noop,
@@ -187,7 +187,9 @@
     PM: '下午',
     TIME_TITLE: '时间',
     WEEK_TITLE: '星期',
-    WEEK_DAYS: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
+    WEEK_DAYS: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
+    DRAG_TIP: '可拖动鼠标选择时间段',
+    RESET: '清空选择'
   };
 
   // English
@@ -196,7 +198,9 @@
     PM: 'PM',
     TIME_TITLE: 'TIME',
     WEEK_TITLE: 'DAY',
-    WEEK_DAYS: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
+    WEEK_DAYS: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'],
+    DRAG_TIP: 'Drag to select hours',
+    RESET: 'Reset Selected'
   };
 
   // Template
@@ -211,7 +215,8 @@
       '</tr>',
     HOUR_HEAD_CELL: '<th class="scheduler-hour-toggle" data-hour-toggle="%s" colspan="%s">%s</th>',
     DAY_ROW: '<tr data-index="%s"><td class="scheduler-day-toggle" data-day-toggle="%s">%s</td>%s</tr>',
-    HOUR_CELL: '<td class="scheduler-hour%s" data-row="%s" data-col="%s"></td>'
+    HOUR_CELL: '<td class="scheduler-hour%s" data-row="%s" data-col="%s"></td>',
+    FOOT_ROW: '<tr><td colspan="%s"><span class="scheduler-tips">%s</span><a class="scheduler-reset">%s</a></td></tr>'
   };
 
   // Util
@@ -252,6 +257,9 @@
     this.$el.addClass('scheduler');
     this.initHead();
     this.initBody();
+    if (this.options.footer) {
+      this.initFoot();
+    }
   };
 
   proto.initHead = function () {
@@ -285,6 +293,16 @@
       .on('mouseup', '.scheduler-hour', me.onMouseUp.bind(me));
   };
 
+  proto.initFoot = function () {
+    var me = this;
+    me.$foot = me.$el.find('>tfoot');
+    if (!me.$foot.length) {
+      me.$foot = $('<tfoot></tfoot>').appendTo(me.$el);
+    }
+    me.$foot.append(me.getFootHtml());
+    me.$foot.on('click', '.scheduler-reset', me.onReset.bind(me))
+  };
+
   proto.getHeadHtml = function (data) {
     var me = this;
     var options = me.options;
@@ -307,6 +325,17 @@
     }
     return sprintf('<tr>%s</tr>', hours);
   };
+
+  proto.getFootHtml = function () {
+    var me = this;
+    var options = me.options;
+    return sprintf(
+      $.fn.scheduler.templates.FOOT_ROW,
+      options.accuracy * 24 + 1,
+      options.DRAG_TIP,
+      options.RESET
+    )
+  }
 
   proto.getBodyHtml = function (data) {
     var me = this;
@@ -450,6 +479,11 @@
     this.selectMode = SelectMode.NONE;
     this.options.onSelect.call(this.$el, this.val());
   };
+
+  proto.onReset = function () {
+    this.val({})
+    this.options.onSelect.call(this.$el, this.val());
+  }
 
   /**
    * 根据选择模式合并合个集合
